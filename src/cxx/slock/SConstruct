@@ -1,0 +1,8 @@
+# Sources
+sources = ['private/sloc.cpp']
+
+# Build Executable
+Library( source = 'slock', source = sources )
+
+# Optimize rebuild by Timestamp, then MD5
+Decider( 'MD5-timespamp' )
