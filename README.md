@@ -11,7 +11,7 @@ allows to save some amount of CPU time, by avoiding unnecessary
 synchronization between threads in case of samll operation.
 
 # Usage
-Use config.hpp to reconfigure. For example to use other mutex-type.
+Use slock.hpp to reconfigure. For example to use other mutex-type.
 
 # Features
  - RAII, means, that mutex & locks are automatically unlocked (exceptions-safe);
