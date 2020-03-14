@@ -22,19 +22,46 @@
 #include "main.hpp"
 
 // ===========================================================
+// FIELDS
+// ===========================================================
+
+slock_mutex_t mutex_;
+
+// ===========================================================
 // METHODS
 // ===========================================================
 
+void foo()
+{
+	std::cout << "foo start" << std::endl;
+	slock::SpinLock lock_( &mutex_, false );
+	std::cout << "foo end" << std::endl;
+}
+
+void bar()
+{
+	std::cout << "bar start" << std::endl;
+	slock::SpinLock lock_( &mutex_, false );
+	std::cout << "bar end" << std::endl;
+}
+
 int main()
 {
+	std::cout << "Starting threads" << std::endl;
 
-	// Hello World !
-	std::cout << "Hello World !" << std::endl;
+	std::thread first( foo );
+	std::thread second( bar );
+
+	std::cout << "Waiting threads" << std::endl;
+
+	first.join();
+	second.join();
+
+	std::cout << "Test complete, press any key to exit." << std::endl;
 	std::cin.get();
 
 	// OK
 	return 0;
-
 }
 
 // -----------------------------------------------------------

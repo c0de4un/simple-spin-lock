@@ -21,7 +21,7 @@ cmake_minimum_required ( VERSION 3.5 FATAL_ERROR ) # QT5 + CMake required 3.5 mi
 set ( PROJECT_NAME "slock-demo" )
 
 # Project Version
-set ( PROJECT_VERSION 0.0.1 )
+set ( PROJECT_VERSION 1.0.0 )
 
 # Configure Project
 project ( ${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES C CXX )
@@ -85,7 +85,7 @@ set_target_properties ( slock_demo PROPERTIES
 #endif ( CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo" )
 
 # Link
-target_link_libraries ( slock_demo ${slock} )
+target_link_libraries ( slock_demo slock )
 
 # Include Headers
 target_include_directories ( slock_demo PUBLIC "../slock/public" )

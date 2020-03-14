@@ -12,8 +12,8 @@
 * POSSIBILITY OF SUCH DAMAGE.
 **/
 
-#ifndef SLOCK_STATE_MUTEX_HPP
-#define SLOCK_STATE_MUTEX_HPP
+#ifndef SLOCK_SPIN_LOCK_HPP
+#define SLOCK_SPIN_LOCK_HPP
 
 // -----------------------------------------------------------
 
@@ -26,20 +26,31 @@
 #include "slock.hpp"
 #endif // !SLOCK_HPP
 
+// slock::Mutex
+#ifndef SLOCK_MUTEX_HPP
+#include "Mutex.hpp"
+#endif // !SLOCK_MUTEX_HPP
+
 // ===========================================================
 // TYPES
 // ===========================================================
 
 namespace slock
 {
+
+	// -----------------------------------------------------------
+
 	/**
 	 * @brief
-	 * StateMutex - wrapper (decorator) for mutex.
+	 * SpinLock - decorator for thread-lock.
 	 * 
+	 * @Features:
+	 * - spin;
+	 * - RAII, mutex atomatically unlocked;
+	 *
 	 * @version 0.1
-	 * @author Denis Z. (code4un@yandex.ru)
 	**/
-	class StateMutex final
+	class SpinLock final
 	{
 
 	private:
@@ -50,11 +61,19 @@ namespace slock
 		// CONSTANTS & FIELDS
 		// ===========================================================
 
-		/** THE, Mutex. **/
-		slock_mutex_t mMutex;
+		static constexpr const unsigned char SPIN_LIMIT = 2;
 
-		/** Atomic-flag. **/
-		slock_aflag_t mLockedFlag;
+		/** Mutex. **/
+		slock::Mutex* mMutex;
+
+		// ===========================================================
+		// DELETED
+		// ===========================================================
+
+		SpinLock(const SpinLock&) = delete;
+		SpinLock& operator=(const SpinLock&) = delete;
+		SpinLock(SpinLock&&) = delete;
+		SpinLock& operator=(SpinLock&&) = delete;
 
 		// -----------------------------------------------------------
 
@@ -68,40 +87,74 @@ namespace slock
 
 		/**
 		 * @brief
-		 * StateMutex default constructor.
+		 * SpinLock default constructor.
 		 * 
+		 * @param pMutex - mutex.
+		 * @param defferLock - 'true' for deffer-lock, 'false' to lock.
 		 * @throws - no exceptions.
 		**/
-		explicit StateMutex( ) SLOCK_NOEXCEPT;
+		explicit SpinLock( slock::Mutex* const pMutex = nullptr, const bool defferLock = false ) SLOCK_NOEXCEPT;
 
 		/**
 		 * @brief
-		 * StateMutex destructor.
-		 *
-		 * (?) RAII, mutex automatically closed, without causing exceptions.
-		 *
+		 * SpinLock destructor.
+		 * 
 		 * @throws - no exceptions.
 		**/
-		~StateMutex( ) SLOCK_NOEXCEPT;
+		~SpinLock() SLOCK_NOEXCEPT;
 
 		// ===========================================================
 		// GETTERS & SETTERS
 		// ===========================================================
 
+		/**
+		 * @brief
+		 * Check if this lock is locked.
+		 * 
+		 * @thread_safety - atomic-flag used.
+		 * @throws - no exceptions.
+		**/
+		bool isLocked() const SLOCK_NOEXCEPT;
+
 		// ===========================================================
 		// METHODS
 		// ===========================================================
 
-		// ===========================================================
-		// OPERATORS
-		// ===========================================================
+		/**
+		 * @brief
+		 * Try lock.
+		 * 
+		 * @param pMutex - mutex to use (switch to).
+		 * @returns - 'true' if locked, 'false' if failed.
+		 * @throws - can throw exception.
+		**/
+		bool try_lock(slock::Mutex* const pMutex = nullptr);
+
+		/**
+		 * @brief
+		 * Lock.
+		 * 
+		 * @param pMutex - mutex to use (switch to).
+		 * @throws - can throw exception.
+		**/
+		void lock(slock::Mutex* const pMutex = nullptr);
+
+		/**
+		 * @brief
+		 * Unlock.
+		 * 
+		 * @throws - can throw exception.
+		**/
+		void unlock();
 
 		// -----------------------------------------------------------
 
-	}; /// slock::StateMutex
+	}; /// slock::SpinLock
+
+	// -----------------------------------------------------------
 
 } /// slock
 
 // -----------------------------------------------------------
 
-#endif // !SLOCK_STATE_MUTEX_HPP
+#endif // !SLOCK_SPIN_LOCK_HPP

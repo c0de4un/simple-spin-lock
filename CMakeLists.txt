@@ -21,7 +21,7 @@ cmake_minimum_required ( VERSION 3.5 FATAL_ERROR ) # QT5 + CMake required 3.5 mi
 set ( PROJECT_NAME "simple-spin-lock" )
 
 # Project Version
-set ( PROJECT_VERSION 0.0.1 )
+set ( PROJECT_VERSION 1.0.0 )
 
 # Configure Project
 project ( ${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES C CXX )

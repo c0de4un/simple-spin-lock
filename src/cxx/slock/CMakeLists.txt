@@ -21,7 +21,7 @@ cmake_minimum_required ( VERSION 3.5 FATAL_ERROR ) # QT5 + CMake required 3.5 mi
 set ( PROJECT_NAME "slock" )
 
 # Project Version
-set ( PROJECT_VERSION 0.0.1 )
+set ( PROJECT_VERSION 1.0.0 )
 
 # Configure Project
 project ( ${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES C CXX )
@@ -51,7 +51,8 @@ option ( BIN_DIR "Output Binaries directory." "${CMAKE_SOURCE_DIR}/bin/${PLATFOR
 # =================================================================================
 
 set ( SLOCK_HEADERS
-	"public/StateMutex.hpp"
+	"public/Mutex.hpp"
+	"public/SpinLock.hpp"
     "public/slock.hpp" )
 
 # =================================================================================
@@ -59,7 +60,8 @@ set ( SLOCK_HEADERS
 # =================================================================================
 
 set ( SLOCK_SOURCES
-    "private/StateMutex.cpp"
+	"private/Mutex.cpp"
+	"private/SpinLock.cpp"
     "private/slock.cpp")
 
 # =================================================================================

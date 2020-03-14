@@ -22,6 +22,9 @@
 #include <iostream>
 
 // Include slock
-#include <slock.hpp>
+#include <SpinLock.hpp>
+
+// Include C++ thread
+#include <thread>
 
 // -----------------------------------------------------------
